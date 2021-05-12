@@ -112,7 +112,7 @@ int main() {
         printf("    h          k        U(x=0.5;t=1)        w(0.5;1)         erro = U - w  ");
     }
 
-    for (int l = 1; l < 4; l++) {
+    for (int l = 1; l < 7; l++) {
         if (l>1)
             N=N*2;
         /*
@@ -143,7 +143,7 @@ int main() {
         if (imprime) {
             imprimeFuncao("Funcao U(x=0.5; t=1) =", 0.5, 1, Uptr);
         }
-        MPI_Barrier(MPI_COMM_WORLD);
+        //MPI_Barrier(MPI_COMM_WORLD);
         NewMatriz(M + 1, M + 1, DF, 0);
         NewMatriz(M + 1, M + 1, DF1, 0);
         NewMatriz(M + 1, M + 1, DF2, 0);
@@ -153,7 +153,7 @@ int main() {
         NewVetor(M + 1, S2, 1);
         NewVetor(M + 1, w1, 0);
         NewVetor(M + 1, wAux, 0);
-        MPI_Barrier(MPI_COMM_WORLD);
+        //MPI_Barrier(MPI_COMM_WORLD);
 
         if (imprime) {
             imprimeMatriz("Matriz DF =", M + 1, M + 1, DF);
@@ -218,9 +218,9 @@ int main() {
             double Aprox = w[M / 2][N];
             printf("\n%\8.6f    %8.6f   %14.12f    %14.12f    %14.12f", h, k, R, Aprox, R - Aprox);
         }
-        MPI_Barrier(MPI_COMM_WORLD);
+        //MPI_Barrier(MPI_COMM_WORLD);
         DeleteData();
-        MPI_Barrier(MPI_COMM_WORLD);
+        //MPI_Barrier(MPI_COMM_WORLD);
     }
     if ((imprime2) && (world_rank == 0)) {
         cout << "\n\nTecle uma tecla e apos Enter para finalizar...\n";
@@ -398,7 +398,7 @@ void Jacobi(double **DF, double *F, double *S1, double *S2) {
             }
 
         }
-        MPI_Barrier(MPI_COMM_WORLD);
+        //MPI_Barrier(MPI_COMM_WORLD);
         /* everyone calls bcast, data is taken from root and ends up in everyone's buf */
         //MPI_Bcast(&S2[ip], my_I, MPI_DOUBLE, world_rank, MPI_COMM_WORLD);
         for (int i = 0; i < world_size - 1; i++) {
@@ -408,7 +408,7 @@ void Jacobi(double **DF, double *F, double *S1, double *S2) {
         MPI_Bcast(&S2[(world_size - 1) * tam], M + 1 - (world_size - 1) * tam, MPI_DOUBLE, world_size - 1,
                   MPI_COMM_WORLD);
 
-        MPI_Barrier(MPI_COMM_WORLD);
+        //MPI_Barrier(MPI_COMM_WORLD);
         if ((imprime2) && (world_rank == 0)) {
             for (int i = 0; i <= M; i++)
                 printf("\nDepois BCast n= %d, world_rank=%d, ip=%d, fp=%d, S2[%d] = %8.4f ,  My_I = %d", n, world_rank,
